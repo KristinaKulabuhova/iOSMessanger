@@ -20,6 +20,8 @@ struct PaddingButton {
     static let right: CGFloat = 20
 }
 
+//let insents = UIEdgeInsets(top: 200, left: 10, bottom: 0, right: 10)
+
 final class ViewController: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource {
     
     var messageButton: UIButton = {
@@ -50,19 +52,22 @@ final class ViewController: UIViewController, UICollectionViewDelegate, UICollec
         var layout = UICollectionViewFlowLayout()
         layout.scrollDirection = .horizontal
         var photosCollection = UICollectionView(frame: .zero, collectionViewLayout: layout)
-        photosCollection.register(UICollectionViewCell.self, forCellWithReuseIdentifier: "cell")
+        photosCollection.register(PhoroCollectionViewCell.self, forCellWithReuseIdentifier: PhoroCollectionViewCell.identifier)
         return photosCollection
     }()
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        6
+        return 7
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = photosCollection.dequeueReusableCell(withReuseIdentifier: "cell", for: indexPath)
-        cell.contentView.backgroundColor = .systemBlue
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: PhoroCollectionViewCell.identifier, for: indexPath)
         return cell
     }
+    
+//    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insertForSectionAt section: Int) -> UIEdgeInsets {
+//        return insents
+//    }
     
  
     
@@ -83,7 +88,11 @@ final class ViewController: UIViewController, UICollectionViewDelegate, UICollec
         photosCollection.dataSource = self
         
         setupButtons(stackView)
-        //setupPhotosCollection(stackView)
+        setupPhotosCollection(stackView)
+    }
+    
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
     }
     
     func setupButtons(_ stackView: UIStackView) {
@@ -98,17 +107,34 @@ final class ViewController: UIViewController, UICollectionViewDelegate, UICollec
 
         self.view.addSubview(stackView)
         
-        stackView.centerXAnchor.constraint(equalTo: self.view.centerXAnchor).isActive = true
-        stackView.centerYAnchor.constraint(equalTo: self.view.topAnchor, constant: Constants.topStackView).isActive = true
+        NSLayoutConstraint.activate([
+            stackView.centerXAnchor.constraint(equalTo: self.view.centerXAnchor),
+            stackView.centerYAnchor.constraint(equalTo: self.view.topAnchor, constant: Constants.topStackView)
+        ])
     }
     
-//    func setupPhotosCollection(_ stackView: UIStackView) {
-//        self.view.addSubview(photosCollection)
-//        photosCollection.centerXAnchor.constraint(equalTo: self.view.centerXAnchor).isActive = true
-//        photosCollection.rightAnchor.constraint(equalTo: self.view.rightAnchor).isActive = true
-//        photosCollection.leftAnchor.constraint(equalTo: self.view.leftAnchor).isActive = true
-//        photosCollection.topAnchor.constraint(equalTo: stackView.bottomAnchor, constant: 100).isActive = true
-//    }
+    func setupPhotosCollection(_ stackView: UIStackView) {
+        photosCollection.translatesAutoresizingMaskIntoConstraints = false
+        self.view.addSubview(photosCollection)
+        
+//        NSLayoutConstraint.activate([
+//            //photosCollection.centerXAnchor.constraint(equalTo: self.view.centerXAnchor),
+//            photosCollection.rightAnchor.constraint(equalTo: self.view.rightAnchor, constant: -50),
+//            photosCollection.leftAnchor.constraint(equalTo: self.view.leftAnchor, constant: 50),
+//            photosCollection.topAnchor.constraint(equalTo: self.view.bottomAnchor, constant: 300),
+//            photosCollection.widthAnchor.constraint(equalToConstant: 200)
+//        ])
+        
+        NSLayoutConstraint.activate([
+                photosCollection.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 200),
+                //photosCollection.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
+                photosCollection.leftAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leftAnchor, constant: 10),
+                photosCollection.heightAnchor.constraint(equalToConstant: 50),
+                photosCollection.rightAnchor.constraint(equalTo: view.safeAreaLayoutGuide.rightAnchor, constant: -10)
+            ])
+        
+        
+    }
 }
 
 

@@ -16,6 +16,7 @@
 		63E4D47627CC0A4100F74780 /* MessagerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63E4D47527CC0A4100F74780 /* MessagerTests.swift */; };
 		63E4D48027CC0A4100F74780 /* MessagerUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63E4D47F27CC0A4100F74780 /* MessagerUITests.swift */; };
 		63E4D48227CC0A4100F74780 /* MessagerUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63E4D48127CC0A4100F74780 /* MessagerUITestsLaunchTests.swift */; };
+		63E4D4DE27D9684100F74780 /* PhotoCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63E4D4DD27D9684100F74780 /* PhotoCollectionViewCell.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -49,6 +50,7 @@
 		63E4D47B27CC0A4100F74780 /* MessagerUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MessagerUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		63E4D47F27CC0A4100F74780 /* MessagerUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessagerUITests.swift; sourceTree = "<group>"; };
 		63E4D48127CC0A4100F74780 /* MessagerUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessagerUITestsLaunchTests.swift; sourceTree = "<group>"; };
+		63E4D4DD27D9684100F74780 /* PhotoCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoCollectionViewCell.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -102,6 +104,7 @@
 				63E4D45B27CC0A3F00F74780 /* AppDelegate.swift */,
 				63E4D45D27CC0A3F00F74780 /* SceneDelegate.swift */,
 				63E4D45F27CC0A3F00F74780 /* ViewController.swift */,
+				63E4D4DD27D9684100F74780 /* PhotoCollectionViewCell.swift */,
 				63E4D46727CC0A4100F74780 /* Assets.xcassets */,
 				63E4D46927CC0A4100F74780 /* LaunchScreen.storyboard */,
 				63E4D46C27CC0A4100F74780 /* Info.plist */,
@@ -258,6 +261,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				63E4D46627CC0A3F00F74780 /* Messager.xcdatamodeld in Sources */,
+				63E4D4DE27D9684100F74780 /* PhotoCollectionViewCell.swift in Sources */,
 				63E4D46027CC0A3F00F74780 /* ViewController.swift in Sources */,
 				63E4D45C27CC0A3F00F74780 /* AppDelegate.swift in Sources */,
 				63E4D45E27CC0A3F00F74780 /* SceneDelegate.swift in Sources */,
