@@ -17,6 +17,7 @@
 		63E4D48027CC0A4100F74780 /* MessagerUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63E4D47F27CC0A4100F74780 /* MessagerUITests.swift */; };
 		63E4D48227CC0A4100F74780 /* MessagerUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63E4D48127CC0A4100F74780 /* MessagerUITestsLaunchTests.swift */; };
 		63E4D4DE27D9684100F74780 /* PhotoCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63E4D4DD27D9684100F74780 /* PhotoCollectionViewCell.swift */; };
+		63E4D4E027DA522E00F74780 /* PhotoCollectionHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63E4D4DF27DA522E00F74780 /* PhotoCollectionHeader.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -51,6 +52,7 @@
 		63E4D47F27CC0A4100F74780 /* MessagerUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessagerUITests.swift; sourceTree = "<group>"; };
 		63E4D48127CC0A4100F74780 /* MessagerUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessagerUITestsLaunchTests.swift; sourceTree = "<group>"; };
 		63E4D4DD27D9684100F74780 /* PhotoCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoCollectionViewCell.swift; sourceTree = "<group>"; };
+		63E4D4DF27DA522E00F74780 /* PhotoCollectionHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoCollectionHeader.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -101,6 +103,7 @@
 		63E4D45A27CC0A3F00F74780 /* Messager */ = {
 			isa = PBXGroup;
 			children = (
+				63E4D4DF27DA522E00F74780 /* PhotoCollectionHeader.swift */,
 				63E4D45B27CC0A3F00F74780 /* AppDelegate.swift */,
 				63E4D45D27CC0A3F00F74780 /* SceneDelegate.swift */,
 				63E4D45F27CC0A3F00F74780 /* ViewController.swift */,
@@ -261,6 +264,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				63E4D46627CC0A3F00F74780 /* Messager.xcdatamodeld in Sources */,
+				63E4D4E027DA522E00F74780 /* PhotoCollectionHeader.swift in Sources */,
 				63E4D4DE27D9684100F74780 /* PhotoCollectionViewCell.swift in Sources */,
 				63E4D46027CC0A3F00F74780 /* ViewController.swift in Sources */,
 				63E4D45C27CC0A3F00F74780 /* AppDelegate.swift in Sources */,

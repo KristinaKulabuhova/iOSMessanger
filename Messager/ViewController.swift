@@ -47,14 +47,7 @@ final class ViewController: UIViewController, UICollectionViewDelegate, UICollec
         return callButton
     }()
     
-  
-    var photosCollection: UICollectionView = {
-        var layout = UICollectionViewFlowLayout()
-        layout.scrollDirection = .horizontal
-        var photosCollection = UICollectionView(frame: .zero, collectionViewLayout: layout)
-        photosCollection.register(PhoroCollectionViewCell.self, forCellWithReuseIdentifier: PhoroCollectionViewCell.identifier)
-        return photosCollection
-    }()
+    var photosCollection: UICollectionView?
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return 7
@@ -65,34 +58,54 @@ final class ViewController: UIViewController, UICollectionViewDelegate, UICollec
         return cell
     }
     
+    func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
+        if kind == UICollectionView.elementKindSectionHeader {
+            let sectionHeader = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: PhotoCollectionHeader.identifier, for: indexPath) as! PhotoCollectionHeader
+            sectionHeader.configure()
+            return sectionHeader
+        } else { //No footer in this case but can add option for that
+             return UICollectionReusableView()
+        }
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
+        return CGSize(width: view.frame.size.width, height: 50)
+    }
+    
 //    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insertForSectionAt section: Int) -> UIEdgeInsets {
 //        return insents
 //    }
     
- 
+    let stackView = UIStackView()
     
-    init(){
-        super.init(nibName: nil, bundle: nil)
-    }
-
-    required init?(coder: NSCoder) {
-            return nil
-    }
-
     override func viewDidLoad() {
         view.backgroundColor = .white
         super.viewDidLoad()
-        let stackView = UIStackView()
         
-        photosCollection.delegate = self
-        photosCollection.dataSource = self
-        
+    }
+    
+    override func viewWillLayoutSubviews() {
+        collectionSetting()
         setupButtons(stackView)
         setupPhotosCollection(stackView)
+        
+    }
+    
+    
+    func collectionSetting() {
+        let layoutCollection = UICollectionViewFlowLayout()
+        layoutCollection.scrollDirection = .horizontal
+        photosCollection = UICollectionView(frame: .zero, collectionViewLayout: layoutCollection)
+        //layoutCollection.itemSize = CGSize(width: view.frame.size.width / 4.4, height: view.frame.size.height / 6)
+        photosCollection?.register(PhoroCollectionViewCell.self, forCellWithReuseIdentifier: PhoroCollectionViewCell.identifier)
+        photosCollection?.register(PhotoCollectionHeader.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: PhotoCollectionHeader.identifier)
+        photosCollection?.delegate = self
+        photosCollection?.dataSource = self
     }
     
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
+        
     }
     
     func setupButtons(_ stackView: UIStackView) {
@@ -114,26 +127,17 @@ final class ViewController: UIViewController, UICollectionViewDelegate, UICollec
     }
     
     func setupPhotosCollection(_ stackView: UIStackView) {
-        photosCollection.translatesAutoresizingMaskIntoConstraints = false
-        self.view.addSubview(photosCollection)
-        
-//        NSLayoutConstraint.activate([
-//            //photosCollection.centerXAnchor.constraint(equalTo: self.view.centerXAnchor),
-//            photosCollection.rightAnchor.constraint(equalTo: self.view.rightAnchor, constant: -50),
-//            photosCollection.leftAnchor.constraint(equalTo: self.view.leftAnchor, constant: 50),
-//            photosCollection.topAnchor.constraint(equalTo: self.view.bottomAnchor, constant: 300),
-//            photosCollection.widthAnchor.constraint(equalToConstant: 200)
-//        ])
-        
-        NSLayoutConstraint.activate([
-                photosCollection.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 200),
-                //photosCollection.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
-                photosCollection.leftAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leftAnchor, constant: 10),
-                photosCollection.heightAnchor.constraint(equalToConstant: 50),
-                photosCollection.rightAnchor.constraint(equalTo: view.safeAreaLayoutGuide.rightAnchor, constant: -10)
+        if let collection = photosCollection {
+            collection.translatesAutoresizingMaskIntoConstraints = false
+            self.view.addSubview(collection)
+            NSLayoutConstraint.activate([
+                collection.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 300),
+                    //photosCollection.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
+                collection.leftAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leftAnchor, constant: 10),
+                collection.heightAnchor.constraint(equalToConstant: 50),
+                collection.rightAnchor.constraint(equalTo: view.safeAreaLayoutGuide.rightAnchor, constant: -10)
             ])
-        
-        
+        }
     }
 }
 
