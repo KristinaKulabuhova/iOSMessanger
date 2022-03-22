@@ -7,7 +7,7 @@
 
 import UIKit
 
-class PhoroCollectionViewCell: UICollectionViewCell {
+final class PhoroCollectionViewCell: UICollectionViewCell {
     static let identifier = "PhotoCollectionViewCell"
     
     private let imageView: UIImageView = {
@@ -44,10 +44,5 @@ class PhoroCollectionViewCell: UICollectionViewCell {
     override func layoutSubviews() {
         super.layoutSubviews()
         imageView.frame = contentView.bounds
-    }
-    
-    override func prepareForReuse() {
-        super.prepareForReuse()
-        //imageView.image = nil
     }
 }

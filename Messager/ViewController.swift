@@ -7,47 +7,45 @@
 
 import UIKit
 
-enum Constants {
-    static let topStackView: CGFloat = 200
-    static let spacingStackView: CGFloat = 20
-    static let cornerRadiusButton: CGFloat = 10
-}
-
-struct PaddingButton {
-    static let top: CGFloat = 10
-    static let left: CGFloat = 20
-    static let bottom: CGFloat = 10
-    static let right: CGFloat = 20
-}
-
-//let insents = UIEdgeInsets(top: 200, left: 10, bottom: 0, right: 10)
 
 final class ViewController: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource {
     
-    var messageButton: UIButton = {
-        var messageButton = UIButton(type: .system)
+    enum Constants {
+        static let topStackView: CGFloat = 200
+        static let spacingStackView: CGFloat = 20
+        static let cornerRadiusButton: CGFloat = 10
+    }
+
+    struct PaddingButton {
+        static let top: CGFloat = 10
+        static let left: CGFloat = 20
+        static let bottom: CGFloat = 10
+        static let right: CGFloat = 20
+    }
+    
+    struct settingButton {
+        var title: String
+        var backgroundColor: UIColor
+        var TitleColor: UIColor
+    }
+    
+    func setUpButton(setting: settingButton) -> UIButton {
+        let messageButton = UIButton(type: .system)
         messageButton.translatesAutoresizingMaskIntoConstraints = false
-        messageButton.backgroundColor = .systemTeal
-        messageButton.setTitleColor(.white, for: .normal)
-        messageButton.setTitle("Сообщение", for: .normal)
+        messageButton.backgroundColor = setting.backgroundColor
+        messageButton.setTitleColor(setting.TitleColor, for: .normal)
+        messageButton.setTitle(setting.title, for: .normal)
         messageButton.layer.cornerRadius = Constants.cornerRadiusButton
         messageButton.contentEdgeInsets = UIEdgeInsets(top: PaddingButton.top, left: PaddingButton.left, bottom: PaddingButton.bottom, right: PaddingButton.right)
         return messageButton
-        
-    }()
-    
-    var callButton: UIButton = {
-        var callButton = UIButton(type: .system)
-        callButton.translatesAutoresizingMaskIntoConstraints = false
-        callButton.backgroundColor = .systemGray
-        callButton.setTitleColor(.white, for: .normal)
-        callButton.setTitle("Позвонить", for: .normal)
-        callButton.layer.cornerRadius = Constants.cornerRadiusButton
-        callButton.contentEdgeInsets = UIEdgeInsets(top: PaddingButton.top, left: PaddingButton.left, bottom: PaddingButton.bottom, right: PaddingButton.right)
-        return callButton
-    }()
-    
+    }
+    var messageButton: UIButton?
+    var callButton: UIButton?
     var photosCollection: UICollectionView?
+    
+    let infoMessageButton = settingButton(title: "Сообщение", backgroundColor: .systemTeal, TitleColor: .white)
+    let infoCallButton = settingButton(title: "Позвонить", backgroundColor: .systemGray, TitleColor: .white)
+
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return 7
@@ -61,7 +59,7 @@ final class ViewController: UIViewController, UICollectionViewDelegate, UICollec
     func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
         if kind == UICollectionView.elementKindSectionHeader {
             let sectionHeader = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: PhotoCollectionHeader.identifier, for: indexPath) as! PhotoCollectionHeader
-            sectionHeader.configure()
+            sectionHeader.initialSetUp()
             return sectionHeader
         } else { //No footer in this case but can add option for that
              return UICollectionReusableView()
@@ -72,67 +70,64 @@ final class ViewController: UIViewController, UICollectionViewDelegate, UICollec
         return CGSize(width: view.frame.size.width, height: 50)
     }
     
-//    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insertForSectionAt section: Int) -> UIEdgeInsets {
-//        return insents
-//    }
-    
-    let stackView = UIStackView()
-    
     override func viewDidLoad() {
         view.backgroundColor = .white
         super.viewDidLoad()
         
+        messageButton = setUpButton(setting: infoMessageButton)
+        callButton = setUpButton(setting: infoCallButton)
+        
+        setUpStackView()
+        setUpPhotoCollectionView()
+        
+        addStackViewSubviews()
     }
+    
+    let stackView = UIStackView()
     
     override func viewWillLayoutSubviews() {
-        collectionSetting()
-        setupButtons(stackView)
-        setupPhotosCollection(stackView)
-        
+        super.viewWillLayoutSubviews()
+        layoutStackView()
+        layoutPhotosCollectionView()
     }
     
-    
-    func collectionSetting() {
+    func setUpPhotoCollectionView() {
         let layoutCollection = UICollectionViewFlowLayout()
         layoutCollection.scrollDirection = .horizontal
         photosCollection = UICollectionView(frame: .zero, collectionViewLayout: layoutCollection)
-        //layoutCollection.itemSize = CGSize(width: view.frame.size.width / 4.4, height: view.frame.size.height / 6)
         photosCollection?.register(PhoroCollectionViewCell.self, forCellWithReuseIdentifier: PhoroCollectionViewCell.identifier)
         photosCollection?.register(PhotoCollectionHeader.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: PhotoCollectionHeader.identifier)
         photosCollection?.delegate = self
         photosCollection?.dataSource = self
+        photosCollection?.translatesAutoresizingMaskIntoConstraints = false
+        if let collection = photosCollection {view.addSubview(collection)}
     }
     
-    override func viewDidLayoutSubviews() {
-        super.viewDidLayoutSubviews()
-        
-    }
-    
-    func setupButtons(_ stackView: UIStackView) {
+    func setUpStackView() {
         stackView.axis = NSLayoutConstraint.Axis.horizontal
         stackView.distribution = UIStackView.Distribution.equalSpacing
         stackView.alignment = UIStackView.Alignment.center
         stackView.spacing = Constants.spacingStackView
-
-        stackView.addArrangedSubview(messageButton)
-        stackView.addArrangedSubview(callButton)
         stackView.translatesAutoresizingMaskIntoConstraints = false
-
-        self.view.addSubview(stackView)
+    }
         
+    func addStackViewSubviews() {
+        view.addSubview(stackView)
+        if let button = messageButton {stackView.addArrangedSubview(button)}
+        if let button = callButton {stackView.addArrangedSubview(button)}
+    }
+    
+    func layoutStackView() {
         NSLayoutConstraint.activate([
             stackView.centerXAnchor.constraint(equalTo: self.view.centerXAnchor),
             stackView.centerYAnchor.constraint(equalTo: self.view.topAnchor, constant: Constants.topStackView)
         ])
     }
     
-    func setupPhotosCollection(_ stackView: UIStackView) {
+    func layoutPhotosCollectionView() {
         if let collection = photosCollection {
-            collection.translatesAutoresizingMaskIntoConstraints = false
-            self.view.addSubview(collection)
             NSLayoutConstraint.activate([
                 collection.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 300),
-                    //photosCollection.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
                 collection.leftAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leftAnchor, constant: 10),
                 collection.heightAnchor.constraint(equalToConstant: 50),
                 collection.rightAnchor.constraint(equalTo: view.safeAreaLayoutGuide.rightAnchor, constant: -10)
@@ -140,5 +135,3 @@ final class ViewController: UIViewController, UICollectionViewDelegate, UICollec
         }
     }
 }
-
-

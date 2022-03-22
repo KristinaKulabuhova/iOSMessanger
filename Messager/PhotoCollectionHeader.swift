@@ -7,19 +7,20 @@
 
 import UIKit
 
-class PhotoCollectionHeader: UICollectionReusableView {
+final class PhotoCollectionHeader: UICollectionReusableView {
     static let identifier = "header"
     
      private var label: UILabel = {
          let label: UILabel = UILabel()
+         label.translatesAutoresizingMaskIntoConstraints = false
          label.textColor = .black
          label.font = UIFont.systemFont(ofSize: 20, weight: .semibold)
-         label.sizeToFit()
          label.text = "Header"
+         
          return label
      }()
     
-    public func configure() {
+    public func initialSetUp() {
         backgroundColor = .systemGreen
         addSubview(label)
     }
@@ -28,10 +29,10 @@ class PhotoCollectionHeader: UICollectionReusableView {
         super.layoutSubviews()
         label.frame = bounds
         
-        label.translatesAutoresizingMaskIntoConstraints = false
-        label.topAnchor.constraint(equalTo: self.topAnchor).isActive = true
-        label.leftAnchor.constraint(equalTo: self.leftAnchor, constant: 20).isActive = true
-        label.rightAnchor.constraint(equalTo: self.rightAnchor).isActive = true
-        
+        NSLayoutConstraint.activate([
+            label.topAnchor.constraint(equalTo: topAnchor),
+            label.leftAnchor.constraint(equalTo: leftAnchor, constant: 20),
+            label.rightAnchor.constraint(equalTo: rightAnchor)
+        ])
     }
 }
