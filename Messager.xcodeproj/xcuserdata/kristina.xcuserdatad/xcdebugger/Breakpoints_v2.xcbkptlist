@@ -23,16 +23,16 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            uuid = "93241195-9E54-434F-9047-8039F7E4DC27"
+            uuid = "C9B7C846-9690-4A00-961C-47C6A98CF4B6"
             shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Messager/ViewController.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "219"
-            endingLineNumber = "219"
-            landmarkName = "setUpTextsProfile()"
+            startingLineNumber = "175"
+            endingLineNumber = "175"
+            landmarkName = "addStackIconTextViewSubviews()"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>

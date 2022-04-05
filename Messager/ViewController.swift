@@ -110,15 +110,17 @@ final class ViewController: UIViewController, UICollectionViewDelegate, UICollec
         
         messageButton = setUpButton(setting: infoMessageButton)
         callButton = setUpButton(setting: infoCallButton)
-        setUpTextsProfile()
         
+        setUpStackIconTextView()
+        setUpTextsProfile()
         setUpProfilePhoto()
         setUpStackButtonsView()
         setUpStackInfoView()
         setUpPhotoCollectionView()
         
-        addStackInfoViewSubviews()
         addStackButtonsViewSubviews()
+        addStackInfoViewSubviews()
+        addStackIconTextViewSubviews()
     }
     
     override func viewWillLayoutSubviews() {
@@ -147,6 +149,38 @@ final class ViewController: UIViewController, UICollectionViewDelegate, UICollec
             profilePhoto.bottomAnchor.constraint(equalTo: self.view.topAnchor, constant: Constants.topStackView - 40),
             profilePhoto.heightAnchor.constraint(equalToConstant: Constants.sizeProfilePhoto.height),
             profilePhoto.widthAnchor.constraint(equalToConstant: Constants.sizeProfilePhoto.width)
+        ])
+    }
+    
+    //----------------------------------------------------------//
+    
+    //---------------------STACK_ICON_TEXT---------------------------//
+    var stackIconTextView = UIStackView()
+    
+    func setUpStackIconTextView() {
+        stackIconTextView.axis = NSLayoutConstraint.Axis.horizontal
+        stackIconTextView.distribution = UIStackView.Distribution.fillProportionally
+        stackButtonsView.alignment = UIStackView.Alignment.leading
+        stackButtonsView.isLayoutMarginsRelativeArrangement = true
+        stackIconTextView.spacing = 7
+        stackIconTextView.translatesAutoresizingMaskIntoConstraints = false
+        icon.translatesAutoresizingMaskIntoConstraints = true
+        moreInfomation.translatesAutoresizingMaskIntoConstraints = true
+        icon.setContentHuggingPriority(.defaultLow, for: .horizontal)
+        moreInfomation.setContentHuggingPriority(.defaultHigh, for: .horizontal)
+    }
+        
+    func addStackIconTextViewSubviews() {
+        stackIconTextView.addArrangedSubview(icon)
+        stackIconTextView.addArrangedSubview(moreInfomation)
+    }
+    
+    func layoutStackIconTextView() {
+        NSLayoutConstraint.activate([
+            stackIconTextView.leftAnchor.constraint(equalTo: stackInfoView.leftAnchor),
+            icon.widthAnchor.constraint(equalToConstant: Constants.sizeProfilePhoto.height/4.5),
+            icon.heightAnchor.constraint(equalToConstant: Constants.sizeProfilePhoto.height/4.5),
+            stackIconTextView.bottomAnchor.constraint(equalTo: stackInfoView.bottomAnchor)
         ])
     }
     
@@ -187,8 +221,7 @@ final class ViewController: UIViewController, UICollectionViewDelegate, UICollec
     func setUpStackInfoView() {
         stackInfoView.axis = NSLayoutConstraint.Axis.vertical
         stackInfoView.distribution = UIStackView.Distribution.equalSpacing
-        //stackButtonsView.alignment = UIStackView.Alignment.center
-        //stackButtonsView.isLayoutMarginsRelativeArrangement = true
+        stackInfoView.isLayoutMarginsRelativeArrangement = true
         stackInfoView.spacing = 7
         stackInfoView.translatesAutoresizingMaskIntoConstraints = false
     }
@@ -197,7 +230,7 @@ final class ViewController: UIViewController, UICollectionViewDelegate, UICollec
         view.addSubview(stackInfoView)
         stackInfoView.addArrangedSubview(name)
         stackInfoView.addArrangedSubview(status)
-        stackInfoView.addArrangedSubview(moreInfomation)
+        stackInfoView.addArrangedSubview(stackIconTextView)
     }
     
     func layoutStackInfoView() {
@@ -206,6 +239,7 @@ final class ViewController: UIViewController, UICollectionViewDelegate, UICollec
             stackInfoView.rightAnchor.constraint(equalTo: view.safeAreaLayoutGuide.rightAnchor, constant: -35),
             stackInfoView.bottomAnchor.constraint(equalTo: profilePhoto.bottomAnchor, constant: -15)
         ])
+        layoutStackIconTextView()
     }
     
     //----------------------------------------------------------//
@@ -215,6 +249,9 @@ final class ViewController: UIViewController, UICollectionViewDelegate, UICollec
     var name = UILabel()
     var status = UILabel()
     var moreInfomation = UILabel()
+    let icon = UIImageView(image: UIImage(named: "Icon"))
+    //let myImage = UIImage(named: "Icon")
+    //let stringWithImage = NSMutableAttributedString(string: "Completed!")
     
     func setUpTextsProfile() {
         name.text = "Чичи Александровна"
@@ -222,7 +259,7 @@ final class ViewController: UIViewController, UICollectionViewDelegate, UICollec
         name.textColor = .black
         name.font = UIFont.boldSystemFont(ofSize: 20)
         
-        status.text = "Дизайнер"
+        status.text = "Собачка Чихуахуа"
         status.textAlignment = .left
         status.textColor = .gray
         status.font = UIFont.systemFont(ofSize: 14)
@@ -231,7 +268,22 @@ final class ViewController: UIViewController, UICollectionViewDelegate, UICollec
         moreInfomation.textAlignment = .left
         moreInfomation.textColor = .black
         moreInfomation.font = UIFont.systemFont(ofSize: 15)
+        //moreInfomation.addSubview(icon)
+        
+        //imageView.image = imageView.image!.withRenderingMode(.alwaysTemplate)
+        //imageView.tintColor = UIColor.systemBlue
+        //self.navigationItem.titleView = imageView
+        
+        icon.image?.withTintColor(.systemBlue)
+        icon.contentMode = .scaleAspectFit
+        icon.image = icon.image?.withRenderingMode(.alwaysTemplate)
+        icon.tintColor = .systemTeal
+        icon.clipsToBounds = true
+        //icon.stackInfoView = .spacingUseSystem
+        
     }
     
     //----------------------------------------------------------//
+    
+    
 }
