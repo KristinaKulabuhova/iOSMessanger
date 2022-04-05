@@ -11,15 +11,16 @@ import UIKit
 final class ViewController: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource {
     
     enum Constants {
-        static let topStackView: CGFloat = 200
-        static let spacingStackView: CGFloat = 20
+        static let topStackView: CGFloat = 250
+        static let spacingStackView: CGFloat = 24
         static let cornerRadiusButton: CGFloat = 10
+        static let sizeProfilePhoto: CGSize = CGSize(width: 90, height: 90)
     }
 
     struct PaddingButton {
-        static let top: CGFloat = 10
+        static let top: CGFloat = 13
         static let left: CGFloat = 20
-        static let bottom: CGFloat = 10
+        static let bottom: CGFloat = 13
         static let right: CGFloat = 20
     }
     
@@ -28,6 +29,7 @@ final class ViewController: UIViewController, UICollectionViewDelegate, UICollec
         var backgroundColor: UIColor
         var TitleColor: UIColor
     }
+    
     
     func setUpButton(setting: settingButton) -> UIButton {
         let messageButton = UIButton(type: .system)
@@ -39,16 +41,33 @@ final class ViewController: UIViewController, UICollectionViewDelegate, UICollec
         messageButton.contentEdgeInsets = UIEdgeInsets(top: PaddingButton.top, left: PaddingButton.left, bottom: PaddingButton.bottom, right: PaddingButton.right)
         return messageButton
     }
+    
     var messageButton: UIButton?
     var callButton: UIButton?
     var photosCollection: UICollectionView?
+    var profilePhoto: UIImageView = UIImageView(image: UIImage(named: "Image"))
     
     let infoMessageButton = settingButton(title: "Сообщение", backgroundColor: .systemTeal, TitleColor: .white)
     let infoCallButton = settingButton(title: "Позвонить", backgroundColor: .systemGray, TitleColor: .white)
-
+    
+    
+    //---------------------COLLECTION_PHOTOS---------------------------//
+    
+    func setUpPhotoCollectionView() {
+        let layoutCollection = UICollectionViewFlowLayout()
+        layoutCollection.scrollDirection = .horizontal
+        photosCollection = UICollectionView(frame: .zero, collectionViewLayout: layoutCollection)
+        photosCollection?.register(PhoroCollectionViewCell.self, forCellWithReuseIdentifier: PhoroCollectionViewCell.identifier)
+        photosCollection?.register(PhotoCollectionHeader.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: PhotoCollectionHeader.identifier)
+        photosCollection?.delegate = self
+        photosCollection?.dataSource = self
+        photosCollection?.contentMode = .scaleAspectFill
+        photosCollection?.translatesAutoresizingMaskIntoConstraints = false
+        if let collection = photosCollection {view.addSubview(collection)}
+    }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return 7
+        return 10
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
@@ -67,8 +86,23 @@ final class ViewController: UIViewController, UICollectionViewDelegate, UICollec
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
-        return CGSize(width: view.frame.size.width, height: 50)
+        return CGSize(width: view.frame.size.width, height: 80)
     }
+    
+    func layoutPhotosCollectionView() {
+        if let collection = photosCollection {
+            NSLayoutConstraint.activate([
+                collection.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 350),
+                collection.leftAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leftAnchor, constant: 10),
+                collection.heightAnchor.constraint(equalToConstant: 80),
+                collection.rightAnchor.constraint(equalTo: view.safeAreaLayoutGuide.rightAnchor, constant: -10)
+            ])
+        }
+    }
+    
+    //-----------------------------------------------------------------//
+    
+    
     
     override func viewDidLoad() {
         view.backgroundColor = .white
@@ -76,62 +110,128 @@ final class ViewController: UIViewController, UICollectionViewDelegate, UICollec
         
         messageButton = setUpButton(setting: infoMessageButton)
         callButton = setUpButton(setting: infoCallButton)
+        setUpTextsProfile()
         
-        setUpStackView()
+        setUpProfilePhoto()
+        setUpStackButtonsView()
+        setUpStackInfoView()
         setUpPhotoCollectionView()
         
-        addStackViewSubviews()
+        addStackInfoViewSubviews()
+        addStackButtonsViewSubviews()
     }
-    
-    let stackView = UIStackView()
     
     override func viewWillLayoutSubviews() {
         super.viewWillLayoutSubviews()
-        layoutStackView()
+        layoutStackButtonsView()
+        layoutStackInfoView()
         layoutPhotosCollectionView()
+        layoutProfilePhoto()
     }
     
-    func setUpPhotoCollectionView() {
-        let layoutCollection = UICollectionViewFlowLayout()
-        layoutCollection.scrollDirection = .horizontal
-        photosCollection = UICollectionView(frame: .zero, collectionViewLayout: layoutCollection)
-        photosCollection?.register(PhoroCollectionViewCell.self, forCellWithReuseIdentifier: PhoroCollectionViewCell.identifier)
-        photosCollection?.register(PhotoCollectionHeader.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: PhotoCollectionHeader.identifier)
-        photosCollection?.delegate = self
-        photosCollection?.dataSource = self
-        photosCollection?.translatesAutoresizingMaskIntoConstraints = false
-        if let collection = photosCollection {view.addSubview(collection)}
+    
+    
+    //---------------------PROFILE_PHOTO------------------------//
+    
+    func setUpProfilePhoto() {
+        profilePhoto.layer.cornerRadius = Constants.sizeProfilePhoto.height / 2
+        profilePhoto.clipsToBounds = true
+        profilePhoto.translatesAutoresizingMaskIntoConstraints = false
+        profilePhoto.contentMode = .scaleAspectFill
+        view.addSubview(profilePhoto)
     }
     
-    func setUpStackView() {
-        stackView.axis = NSLayoutConstraint.Axis.horizontal
-        stackView.distribution = UIStackView.Distribution.equalSpacing
-        stackView.alignment = UIStackView.Alignment.center
-        stackView.spacing = Constants.spacingStackView
-        stackView.translatesAutoresizingMaskIntoConstraints = false
-    }
-        
-    func addStackViewSubviews() {
-        view.addSubview(stackView)
-        if let button = messageButton {stackView.addArrangedSubview(button)}
-        if let button = callButton {stackView.addArrangedSubview(button)}
-    }
-    
-    func layoutStackView() {
+    func layoutProfilePhoto() {
         NSLayoutConstraint.activate([
-            stackView.centerXAnchor.constraint(equalTo: self.view.centerXAnchor),
-            stackView.centerYAnchor.constraint(equalTo: self.view.topAnchor, constant: Constants.topStackView)
+            profilePhoto.leftAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leftAnchor, constant: 33),
+            profilePhoto.bottomAnchor.constraint(equalTo: self.view.topAnchor, constant: Constants.topStackView - 40),
+            profilePhoto.heightAnchor.constraint(equalToConstant: Constants.sizeProfilePhoto.height),
+            profilePhoto.widthAnchor.constraint(equalToConstant: Constants.sizeProfilePhoto.width)
         ])
     }
     
-    func layoutPhotosCollectionView() {
-        if let collection = photosCollection {
-            NSLayoutConstraint.activate([
-                collection.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 300),
-                collection.leftAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leftAnchor, constant: 10),
-                collection.heightAnchor.constraint(equalToConstant: 50),
-                collection.rightAnchor.constraint(equalTo: view.safeAreaLayoutGuide.rightAnchor, constant: -10)
-            ])
-        }
+    //----------------------------------------------------------//
+    
+    
+    //---------------------STACK_BUTTONS------------------------//
+    var stackButtonsView = UIStackView()
+    
+    func setUpStackButtonsView() {
+        stackButtonsView.axis = NSLayoutConstraint.Axis.horizontal
+        stackButtonsView.distribution = UIStackView.Distribution.fillEqually
+        stackButtonsView.alignment = UIStackView.Alignment.center
+        stackButtonsView.isLayoutMarginsRelativeArrangement = true
+        stackButtonsView.spacing = Constants.spacingStackView
+        stackButtonsView.translatesAutoresizingMaskIntoConstraints = false
     }
+    
+    func addStackButtonsViewSubviews() {
+        view.addSubview(stackButtonsView)
+        if let button = messageButton {stackButtonsView.addArrangedSubview(button)}
+        if let button = callButton {stackButtonsView.addArrangedSubview(button)}
+    }
+    
+    func layoutStackButtonsView() {
+        NSLayoutConstraint.activate([
+            stackButtonsView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            stackButtonsView.centerYAnchor.constraint(equalTo: view.topAnchor, constant: Constants.topStackView),
+            stackButtonsView.widthAnchor.constraint(equalTo: view.safeAreaLayoutGuide.widthAnchor, constant: -35)
+        ])
+    }
+    //----------------------------------------------------------//
+    
+    
+    //---------------------STACK_INFO---------------------------//
+    var stackInfoView = UIStackView()
+    
+    func setUpStackInfoView() {
+        stackInfoView.axis = NSLayoutConstraint.Axis.vertical
+        stackInfoView.distribution = UIStackView.Distribution.equalSpacing
+        //stackButtonsView.alignment = UIStackView.Alignment.center
+        //stackButtonsView.isLayoutMarginsRelativeArrangement = true
+        stackInfoView.spacing = 7
+        stackInfoView.translatesAutoresizingMaskIntoConstraints = false
+    }
+        
+    func addStackInfoViewSubviews() {
+        view.addSubview(stackInfoView)
+        stackInfoView.addArrangedSubview(name)
+        stackInfoView.addArrangedSubview(status)
+        stackInfoView.addArrangedSubview(moreInfomation)
+    }
+    
+    func layoutStackInfoView() {
+        NSLayoutConstraint.activate([
+            stackInfoView.leftAnchor.constraint(equalTo: profilePhoto.rightAnchor, constant: 15),
+            stackInfoView.rightAnchor.constraint(equalTo: view.safeAreaLayoutGuide.rightAnchor, constant: -35),
+            stackInfoView.bottomAnchor.constraint(equalTo: profilePhoto.bottomAnchor, constant: -15)
+        ])
+    }
+    
+    //----------------------------------------------------------//
+    
+    
+    //----------------------TEXTS_PROFILE------------------------//
+    var name = UILabel()
+    var status = UILabel()
+    var moreInfomation = UILabel()
+    
+    func setUpTextsProfile() {
+        name.text = "Чичи Александровна"
+        name.textAlignment = .left
+        name.textColor = .black
+        name.font = UIFont.boldSystemFont(ofSize: 20)
+        
+        status.text = "Дизайнер"
+        status.textAlignment = .left
+        status.textColor = .gray
+        status.font = UIFont.systemFont(ofSize: 14)
+        
+        moreInfomation.text = "Подробная информация"
+        moreInfomation.textAlignment = .left
+        moreInfomation.textColor = .black
+        moreInfomation.font = UIFont.systemFont(ofSize: 15)
+    }
+    
+    //----------------------------------------------------------//
 }

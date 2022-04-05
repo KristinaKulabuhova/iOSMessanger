@@ -23,49 +23,17 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            uuid = "749E5BBB-AA84-4056-B5E1-84CF8BEEC857"
+            uuid = "93241195-9E54-434F-9047-8039F7E4DC27"
             shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Messager/ViewController.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "116"
-            endingLineNumber = "116"
-            landmarkName = "addStackViewSubviews()"
+            startingLineNumber = "219"
+            endingLineNumber = "219"
+            landmarkName = "setUpTextsProfile()"
             landmarkType = "7">
-            <Locations>
-               <Location
-                  uuid = "749E5BBB-AA84-4056-B5E1-84CF8BEEC857 - dca41d4740f806be"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "Messager.ViewController.addStackViewSubviews() -&gt; ()"
-                  moduleName = "Messager"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/kristina/Desktop/Messager/Messager/ViewController.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "116"
-                  endingLineNumber = "116"
-                  offsetFromSymbolStart = "312">
-               </Location>
-               <Location
-                  uuid = "749E5BBB-AA84-4056-B5E1-84CF8BEEC857 - dca41d4740f806be"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "Messager.ViewController.addStackViewSubviews() -&gt; ()"
-                  moduleName = "Messager"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/kristina/Desktop/Messager/Messager/ViewController.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "116"
-                  endingLineNumber = "116"
-                  offsetFromSymbolStart = "396">
-               </Location>
-            </Locations>
          </BreakpointContent>
       </BreakpointProxy>
    </Breakpoints>
