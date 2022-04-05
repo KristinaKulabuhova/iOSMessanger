@@ -86,16 +86,16 @@ final class ViewController: UIViewController, UICollectionViewDelegate, UICollec
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
-        return CGSize(width: view.frame.size.width, height: 80)
+        return CGSize(width: view.frame.size.width, height: 100)
     }
     
     func layoutPhotosCollectionView() {
         if let collection = photosCollection {
             NSLayoutConstraint.activate([
                 collection.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 350),
-                collection.leftAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leftAnchor, constant: 10),
-                collection.heightAnchor.constraint(equalToConstant: 80),
-                collection.rightAnchor.constraint(equalTo: view.safeAreaLayoutGuide.rightAnchor, constant: -10)
+                collection.leftAnchor.constraint(equalTo: stackButtonsView.leftAnchor),
+                collection.heightAnchor.constraint(equalToConstant: 100),
+                collection.rightAnchor.constraint(equalTo: stackButtonsView.rightAnchor)
             ])
         }
     }
@@ -117,10 +117,12 @@ final class ViewController: UIViewController, UICollectionViewDelegate, UICollec
         setUpStackButtonsView()
         setUpStackInfoView()
         setUpPhotoCollectionView()
+        setUpStackStaticticView()
         
         addStackButtonsViewSubviews()
         addStackInfoViewSubviews()
         addStackIconTextViewSubviews()
+        addStackStaticticViewSubviews()
     }
     
     override func viewWillLayoutSubviews() {
@@ -129,6 +131,7 @@ final class ViewController: UIViewController, UICollectionViewDelegate, UICollec
         layoutStackInfoView()
         layoutPhotosCollectionView()
         layoutProfilePhoto()
+        layoutStackStaticticView()
     }
     
     
@@ -164,10 +167,6 @@ final class ViewController: UIViewController, UICollectionViewDelegate, UICollec
         stackButtonsView.isLayoutMarginsRelativeArrangement = true
         stackIconTextView.spacing = 7
         stackIconTextView.translatesAutoresizingMaskIntoConstraints = false
-        icon.translatesAutoresizingMaskIntoConstraints = true
-        moreInfomation.translatesAutoresizingMaskIntoConstraints = true
-        icon.setContentHuggingPriority(.defaultLow, for: .horizontal)
-        moreInfomation.setContentHuggingPriority(.defaultHigh, for: .horizontal)
     }
         
     func addStackIconTextViewSubviews() {
@@ -178,9 +177,9 @@ final class ViewController: UIViewController, UICollectionViewDelegate, UICollec
     func layoutStackIconTextView() {
         NSLayoutConstraint.activate([
             stackIconTextView.leftAnchor.constraint(equalTo: stackInfoView.leftAnchor),
-            icon.widthAnchor.constraint(equalToConstant: Constants.sizeProfilePhoto.height/4.5),
-            icon.heightAnchor.constraint(equalToConstant: Constants.sizeProfilePhoto.height/4.5),
-            stackIconTextView.bottomAnchor.constraint(equalTo: stackInfoView.bottomAnchor)
+            stackIconTextView.bottomAnchor.constraint(equalTo: stackInfoView.bottomAnchor),
+            icon.widthAnchor.constraint(equalToConstant: Constants.sizeProfilePhoto.height / 4.5),
+            icon.heightAnchor.constraint(equalToConstant: Constants.sizeProfilePhoto.height / 4.5)
         ])
     }
     
@@ -245,13 +244,77 @@ final class ViewController: UIViewController, UICollectionViewDelegate, UICollec
     //----------------------------------------------------------//
     
     
+    //---------------------STACK_STATISTIC---------------------------//
+    var stackStatisticView = UIStackView()
+    var countSublications = 1440
+    var countSubscriptions = 486
+    var countSubscribers = 161
+    let textSublication = UITextView()
+    let textSubscriptions = UITextView()
+    let textSubscribers = UITextView()
+    
+    
+    func setUpTextView(text: UITextView, color: UIColor, subtext: String, count: Int) {
+        text.translatesAutoresizingMaskIntoConstraints = false
+        text.textAlignment = .center
+        text.textColor = color
+        text.text = "\(count) \(subtext)"
+        text.font = UIFont.systemFont(ofSize: 15)
+        text.textContainerInset = UIEdgeInsets(top: 33, left: 0, bottom: 5, right: 0)
+        text.isScrollEnabled = false
+        text.isEditable = false
+    }
+    
+    func setUpStackStaticticView() {
+        
+        setUpTextView(text: textSublication, color: .systemTeal, subtext: "\n публикаций", count: countSublications)
+        setUpTextView(text: textSubscriptions, color: .black, subtext: "\n подписок", count: countSubscriptions)
+        setUpTextView(text: textSubscribers, color: .black, subtext: "тыс. \n подписчиков", count: countSubscribers)
+        
+        stackStatisticView.axis = NSLayoutConstraint.Axis.horizontal
+        stackStatisticView.distribution = UIStackView.Distribution.equalSpacing
+        stackStatisticView.isLayoutMarginsRelativeArrangement = true
+        stackStatisticView.spacing = 3
+        stackStatisticView.translatesAutoresizingMaskIntoConstraints = false
+        
+    }
+        
+    func addStackStaticticViewSubviews() {
+        view.addSubview(stackStatisticView)
+        stackStatisticView.addArrangedSubview(textSublication)
+        stackStatisticView.addArrangedSubview(textSubscriptions)
+        stackStatisticView.addArrangedSubview(textSubscribers)
+    }
+    
+    func addTopAndBottomBorders() {
+        let topBorder = CALayer()
+        let bottomBorder = CALayer()
+        topBorder.frame = CGRect(x: 0.0, y: 0.0, width: self.stackStatisticView.frame.size.width, height: 1)
+        topBorder.backgroundColor = UIColor.systemGray3.cgColor
+        bottomBorder.frame = CGRect(x:0, y: self.stackStatisticView.frame.size.height - 1, width: self.stackStatisticView.frame.size.width, height:1)
+        bottomBorder.backgroundColor = UIColor.systemGray3.cgColor
+        stackStatisticView.layer.addSublayer(topBorder)
+        stackStatisticView.layer.addSublayer(bottomBorder)
+    }
+    
+    func layoutStackStaticticView() {
+        addTopAndBottomBorders()
+        NSLayoutConstraint.activate([
+            stackStatisticView.heightAnchor.constraint(equalToConstant: 90),
+            stackStatisticView.leftAnchor.constraint(equalTo: stackButtonsView.leftAnchor),
+            stackStatisticView.rightAnchor.constraint(equalTo: stackButtonsView.rightAnchor),
+            stackStatisticView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            stackStatisticView.topAnchor.constraint(equalTo: stackButtonsView.bottomAnchor, constant: 17)
+        ])
+    }
+    
+    //----------------------------------------------------------//
+    
     //----------------------TEXTS_PROFILE------------------------//
     var name = UILabel()
     var status = UILabel()
     var moreInfomation = UILabel()
     let icon = UIImageView(image: UIImage(named: "Icon"))
-    //let myImage = UIImage(named: "Icon")
-    //let stringWithImage = NSMutableAttributedString(string: "Completed!")
     
     func setUpTextsProfile() {
         name.text = "Чичи Александровна"
@@ -268,19 +331,9 @@ final class ViewController: UIViewController, UICollectionViewDelegate, UICollec
         moreInfomation.textAlignment = .left
         moreInfomation.textColor = .black
         moreInfomation.font = UIFont.systemFont(ofSize: 15)
-        //moreInfomation.addSubview(icon)
         
-        //imageView.image = imageView.image!.withRenderingMode(.alwaysTemplate)
-        //imageView.tintColor = UIColor.systemBlue
-        //self.navigationItem.titleView = imageView
-        
-        icon.image?.withTintColor(.systemBlue)
-        icon.contentMode = .scaleAspectFit
         icon.image = icon.image?.withRenderingMode(.alwaysTemplate)
         icon.tintColor = .systemTeal
-        icon.clipsToBounds = true
-        //icon.stackInfoView = .spacingUseSystem
-        
     }
     
     //----------------------------------------------------------//
