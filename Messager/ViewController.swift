@@ -92,9 +92,9 @@ final class ViewController: UIViewController, UICollectionViewDelegate, UICollec
     func layoutPhotosCollectionView() {
         if let collection = photosCollection {
             NSLayoutConstraint.activate([
-                collection.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 350),
+                collection.topAnchor.constraint(equalTo: photosButton.bottomAnchor, constant: 5),
                 collection.leftAnchor.constraint(equalTo: stackButtonsView.leftAnchor),
-                collection.heightAnchor.constraint(equalToConstant: 100),
+                collection.heightAnchor.constraint(equalToConstant: 80),
                 collection.rightAnchor.constraint(equalTo: stackButtonsView.rightAnchor)
             ])
         }
@@ -118,11 +118,13 @@ final class ViewController: UIViewController, UICollectionViewDelegate, UICollec
         setUpStackInfoView()
         setUpPhotoCollectionView()
         setUpStackStaticticView()
+        setUpPhotosButton()
         
         addStackButtonsViewSubviews()
         addStackInfoViewSubviews()
         addStackIconTextViewSubviews()
         addStackStaticticViewSubviews()
+        addPhotosButtonSubviews()
     }
     
     override func viewWillLayoutSubviews() {
@@ -132,6 +134,7 @@ final class ViewController: UIViewController, UICollectionViewDelegate, UICollec
         layoutPhotosCollectionView()
         layoutProfilePhoto()
         layoutStackStaticticView()
+        layoutPhotosButtonView()
     }
     
     
@@ -156,6 +159,7 @@ final class ViewController: UIViewController, UICollectionViewDelegate, UICollec
     }
     
     //----------------------------------------------------------//
+    
     
     //---------------------STACK_ICON_TEXT---------------------------//
     var stackIconTextView = UIStackView()
@@ -207,8 +211,9 @@ final class ViewController: UIViewController, UICollectionViewDelegate, UICollec
     func layoutStackButtonsView() {
         NSLayoutConstraint.activate([
             stackButtonsView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            stackButtonsView.centerYAnchor.constraint(equalTo: view.topAnchor, constant: Constants.topStackView),
-            stackButtonsView.widthAnchor.constraint(equalTo: view.safeAreaLayoutGuide.widthAnchor, constant: -35)
+            stackButtonsView.topAnchor.constraint(equalTo: profilePhoto.bottomAnchor, constant: 10),
+            stackButtonsView.widthAnchor.constraint(equalTo: view.safeAreaLayoutGuide.widthAnchor, constant: -35),
+            stackButtonsView.heightAnchor.constraint(equalToConstant: 40)
         ])
     }
     //----------------------------------------------------------//
@@ -234,7 +239,7 @@ final class ViewController: UIViewController, UICollectionViewDelegate, UICollec
     
     func layoutStackInfoView() {
         NSLayoutConstraint.activate([
-            stackInfoView.leftAnchor.constraint(equalTo: profilePhoto.rightAnchor, constant: 15),
+            stackInfoView.leftAnchor.constraint(equalTo: profilePhoto.rightAnchor, constant: 20),
             stackInfoView.rightAnchor.constraint(equalTo: view.safeAreaLayoutGuide.rightAnchor, constant: -35),
             stackInfoView.bottomAnchor.constraint(equalTo: profilePhoto.bottomAnchor, constant: -15)
         ])
@@ -260,7 +265,7 @@ final class ViewController: UIViewController, UICollectionViewDelegate, UICollec
         text.textColor = color
         text.text = "\(count) \(subtext)"
         text.font = UIFont.systemFont(ofSize: 15)
-        text.textContainerInset = UIEdgeInsets(top: 33, left: 0, bottom: 5, right: 0)
+        text.textContainerInset = UIEdgeInsets(top: 25, left: 0, bottom: 12, right: 0)
         text.isScrollEnabled = false
         text.isEditable = false
     }
@@ -300,15 +305,14 @@ final class ViewController: UIViewController, UICollectionViewDelegate, UICollec
     func layoutStackStaticticView() {
         addTopAndBottomBorders()
         NSLayoutConstraint.activate([
-            stackStatisticView.heightAnchor.constraint(equalToConstant: 90),
-            stackStatisticView.leftAnchor.constraint(equalTo: stackButtonsView.leftAnchor),
-            stackStatisticView.rightAnchor.constraint(equalTo: stackButtonsView.rightAnchor),
-            stackStatisticView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            stackStatisticView.topAnchor.constraint(equalTo: stackButtonsView.bottomAnchor, constant: 17)
+            stackStatisticView.heightAnchor.constraint(equalToConstant: 80),
+            stackStatisticView.centerXAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerXAnchor),
+            stackStatisticView.topAnchor.constraint(equalTo: stackButtonsView.bottomAnchor, constant: 20),
+            stackStatisticView.widthAnchor.constraint(equalTo: stackButtonsView.widthAnchor, constant: -20)
         ])
     }
-    
     //----------------------------------------------------------//
+    
     
     //----------------------TEXTS_PROFILE------------------------//
     var name = UILabel()
@@ -339,4 +343,61 @@ final class ViewController: UIViewController, UICollectionViewDelegate, UICollec
     //----------------------------------------------------------//
     
     
+    //-----------------------BUTTON_PHOTOS----------------------//
+    let photosButton = UIButton(type: .system)
+    let countPhoto = 10
+    let countPhotosStr = UITextView()
+    let iconMorePhotos = UIImageView(image: UIImage(named: "MorePhotos"))
+    let textPhoto = UILabel()
+    
+    func setUpPhotosButton() {
+        
+        textPhoto.translatesAutoresizingMaskIntoConstraints = false
+        photosButton.translatesAutoresizingMaskIntoConstraints = false
+        textPhoto.textColor = .black
+        textPhoto.text = "Фотографии "
+        textPhoto.font = .boldSystemFont(ofSize: 16)
+        textPhoto.textAlignment = .center
+        textPhoto.contentMode = .scaleAspectFit
+        countPhotosStr.text = "\(countPhoto)"
+        
+        let countAttribute = [ NSAttributedString.Key.font: UIFont.boldSystemFont(ofSize: 16), NSAttributedString.Key.foregroundColor: UIColor.systemTeal]
+        let countAttrString = NSAttributedString(string: countPhotosStr.text, attributes: countAttribute)
+        countPhotosStr.attributedText = countAttrString
+        
+        let textAttribute = [ NSAttributedString.Key.font: UIFont(name: "Chalkduster", size: 19.0), NSAttributedString.Key.foregroundColor: UIColor.black]
+        let textAttrString = NSAttributedString(string: textPhoto.text!, attributes: textAttribute as [NSAttributedString.Key : Any])
+        textPhoto.attributedText = textAttrString
+
+        let leftCopy = NSMutableAttributedString(attributedString: textPhoto.attributedText!)
+        leftCopy.append(countPhotosStr.attributedText!)
+        textPhoto.attributedText = leftCopy
+        
+        photosButton.contentVerticalAlignment = .center
+        iconMorePhotos.translatesAutoresizingMaskIntoConstraints = false
+        iconMorePhotos.image = iconMorePhotos.image?.withRenderingMode(.alwaysTemplate)
+        iconMorePhotos.tintColor = .black
+        iconMorePhotos.contentMode = .scaleToFill
+    }
+    
+    func addPhotosButtonSubviews() {
+        view.addSubview(photosButton)
+        photosButton.addSubview(iconMorePhotos)
+        photosButton.addSubview(textPhoto)
+    }
+    
+    func layoutPhotosButtonView() {
+        NSLayoutConstraint.activate([
+            photosButton.leftAnchor.constraint(equalTo: stackButtonsView.leftAnchor),
+            photosButton.widthAnchor.constraint(equalTo: stackButtonsView.widthAnchor),
+            photosButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            photosButton.heightAnchor.constraint(equalToConstant: 20),
+            iconMorePhotos.widthAnchor.constraint(equalToConstant: 20),
+            iconMorePhotos.heightAnchor.constraint(equalToConstant: 20),
+            iconMorePhotos.rightAnchor.constraint(equalTo: photosButton.rightAnchor),
+            photosButton.topAnchor.constraint(equalTo: stackStatisticView.bottomAnchor, constant: 25)
+        ])
+    }
+    
+    //----------------------------------------------------------//
 }
