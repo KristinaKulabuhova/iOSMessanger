@@ -61,7 +61,10 @@ final class ViewController: UIViewController, UICollectionViewDelegate, UICollec
         photosCollection?.register(PhotoCollectionHeader.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: PhotoCollectionHeader.identifier)
         photosCollection?.delegate = self
         photosCollection?.dataSource = self
+        layoutCollection.minimumInteritemSpacing = 2
         photosCollection?.contentMode = .scaleAspectFill
+        layoutCollection.estimatedItemSize = CGSize(width: Constants.sizeProfilePhoto.height * 3/4, height: Constants.sizeProfilePhoto.height * 3/4)
+        layoutCollection.sectionInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
         photosCollection?.translatesAutoresizingMaskIntoConstraints = false
         if let collection = photosCollection {view.addSubview(collection)}
     }
@@ -92,7 +95,7 @@ final class ViewController: UIViewController, UICollectionViewDelegate, UICollec
     func layoutPhotosCollectionView() {
         if let collection = photosCollection {
             NSLayoutConstraint.activate([
-                collection.topAnchor.constraint(equalTo: photosButton.bottomAnchor, constant: 5),
+                collection.topAnchor.constraint(equalTo: photosButton.bottomAnchor, constant: 15),
                 collection.leftAnchor.constraint(equalTo: stackButtonsView.leftAnchor),
                 collection.heightAnchor.constraint(equalToConstant: 80),
                 collection.rightAnchor.constraint(equalTo: stackButtonsView.rightAnchor)
@@ -119,12 +122,14 @@ final class ViewController: UIViewController, UICollectionViewDelegate, UICollec
         setUpPhotoCollectionView()
         setUpStackStaticticView()
         setUpPhotosButton()
+        setUpStackHeaderView()
         
         addStackButtonsViewSubviews()
         addStackInfoViewSubviews()
         addStackIconTextViewSubviews()
         addStackStaticticViewSubviews()
         addPhotosButtonSubviews()
+        addStackHeaderViewSubviews()
     }
     
     override func viewWillLayoutSubviews() {
@@ -135,6 +140,7 @@ final class ViewController: UIViewController, UICollectionViewDelegate, UICollec
         layoutProfilePhoto()
         layoutStackStaticticView()
         layoutPhotosButtonView()
+        layoutStackHeaderView()
     }
     
     
@@ -152,9 +158,10 @@ final class ViewController: UIViewController, UICollectionViewDelegate, UICollec
     func layoutProfilePhoto() {
         NSLayoutConstraint.activate([
             profilePhoto.leftAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leftAnchor, constant: 33),
-            profilePhoto.bottomAnchor.constraint(equalTo: self.view.topAnchor, constant: Constants.topStackView - 40),
+//            profilePhoto.bottomAnchor.constraint(equalTo: self.view.topAnchor, constant: Constants.topStackView - 40),
             profilePhoto.heightAnchor.constraint(equalToConstant: Constants.sizeProfilePhoto.height),
-            profilePhoto.widthAnchor.constraint(equalToConstant: Constants.sizeProfilePhoto.width)
+            profilePhoto.widthAnchor.constraint(equalToConstant: Constants.sizeProfilePhoto.width),
+            profilePhoto.topAnchor.constraint(equalTo: stackHeaderView.bottomAnchor, constant: 20)
         ])
     }
     
@@ -281,7 +288,6 @@ final class ViewController: UIViewController, UICollectionViewDelegate, UICollec
         stackStatisticView.isLayoutMarginsRelativeArrangement = true
         stackStatisticView.spacing = 3
         stackStatisticView.translatesAutoresizingMaskIntoConstraints = false
-        
     }
         
     func addStackStaticticViewSubviews() {
@@ -376,7 +382,7 @@ final class ViewController: UIViewController, UICollectionViewDelegate, UICollec
         photosButton.contentVerticalAlignment = .center
         iconMorePhotos.translatesAutoresizingMaskIntoConstraints = false
         iconMorePhotos.image = iconMorePhotos.image?.withRenderingMode(.alwaysTemplate)
-        iconMorePhotos.tintColor = .black
+        iconMorePhotos.tintColor = .systemTeal
         iconMorePhotos.contentMode = .scaleToFill
     }
     
@@ -392,10 +398,80 @@ final class ViewController: UIViewController, UICollectionViewDelegate, UICollec
             photosButton.widthAnchor.constraint(equalTo: stackButtonsView.widthAnchor),
             photosButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             photosButton.heightAnchor.constraint(equalToConstant: 20),
+            textPhoto.topAnchor.constraint(equalTo: photosButton.topAnchor),
             iconMorePhotos.widthAnchor.constraint(equalToConstant: 20),
             iconMorePhotos.heightAnchor.constraint(equalToConstant: 20),
+            iconMorePhotos.bottomAnchor.constraint(equalTo: photosButton.bottomAnchor, constant: 0),
             iconMorePhotos.rightAnchor.constraint(equalTo: photosButton.rightAnchor),
             photosButton.topAnchor.constraint(equalTo: stackStatisticView.bottomAnchor, constant: 25)
+        ])
+    }
+    
+    //----------------------------------------------------------//
+    
+    //---------------------STACK_HEADER_TEXT---------------------------//
+    var stackHeaderView = UIStackView()
+    let menuDots = UIImageView(image: UIImage(named: "MenuDots"))
+    let arrowLeft = UIImageView(image: UIImage(named: "ArrowLeft"))
+    let urlText = UILabel()
+    
+    func setUpStackHeaderView() {
+        stackHeaderView.axis = NSLayoutConstraint.Axis.horizontal
+        stackHeaderView.distribution = UIStackView.Distribution.fillProportionally
+        urlText.text = "chi-chi.dog"
+        urlText.font = UIFont.systemFont(ofSize: 16)
+        urlText.textColor = .black
+        //stackHeaderView.alignment = UIStackView.Alignment.leading
+        //stackHeaderView.isLayoutMarginsRelativeArrangement = true
+        stackHeaderView.spacing = 7
+        stackHeaderView.translatesAutoresizingMaskIntoConstraints = false
+        
+        arrowLeft.image = arrowLeft.image?.withRenderingMode(.alwaysTemplate)
+        arrowLeft.tintColor = .systemTeal
+        menuDots.image = menuDots.image?.withRenderingMode(.alwaysTemplate)
+        menuDots.tintColor = .systemTeal
+        arrowLeft.translatesAutoresizingMaskIntoConstraints = false
+        menuDots.translatesAutoresizingMaskIntoConstraints = false
+        menuDots.contentMode = .scaleAspectFit
+        arrowLeft.contentMode = .scaleAspectFit
+        arrowLeft.focusGroupPriority = .prioritized
+        menuDots.focusGroupPriority = .prioritized
+        urlText.focusGroupPriority = .ignored
+    }
+        
+    func addStackHeaderViewSubviews() {
+        view.addSubview(stackHeaderView)
+        stackHeaderView.addArrangedSubview(arrowLeft)
+        stackHeaderView.addArrangedSubview(urlText)
+        stackHeaderView.addArrangedSubview(menuDots)
+    }
+    
+    func layoutStackHeaderView() {
+        let bottomBorder = CALayer()
+        bottomBorder.frame = CGRect(x:0, y: self.stackHeaderView.frame.size.height - 1, width: self.stackHeaderView.frame.size.width, height:1)
+        bottomBorder.backgroundColor = UIColor.systemGray3.cgColor
+        stackHeaderView.layer.addSublayer(bottomBorder)
+        
+        NSLayoutConstraint.activate([
+            stackHeaderView.leftAnchor.constraint(equalTo: stackStatisticView.leftAnchor),
+            stackHeaderView.widthAnchor.constraint(equalTo: stackStatisticView.widthAnchor),
+            stackHeaderView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 10),
+            stackHeaderView.heightAnchor.constraint(equalToConstant: 40),
+            menuDots.widthAnchor.constraint(equalToConstant: 20),
+            menuDots.heightAnchor.constraint(equalToConstant: 20),
+            arrowLeft.widthAnchor.constraint(equalToConstant: 25),
+            arrowLeft.heightAnchor.constraint(equalToConstant: 20),
+            arrowLeft.leftAnchor.constraint(equalTo: stackHeaderView.leftAnchor),
+            menuDots.rightAnchor.constraint(equalTo: stackHeaderView.rightAnchor),
+            urlText.leftAnchor.constraint(equalTo: arrowLeft.rightAnchor, constant: 20)
+            //arrowLeft.bottomAnchor.
+
+            //arrowLeft.leftAnchor.constraint(equalTo: stackStatisticView.leftAnchor),
+            //menuDots.rightAnchor.constraint(equalTo: stackStatisticView.rightAnchor),
+            //menuDots.widthAnchor.constraint(equalToConstant: 20),
+            //menuDots.heightAnchor.constraint(equalToConstant: 20),
+            //arrowLeft.widthAnchor.constraint(equalToConstant: 20),
+            //arrowLeft.heightAnchor.constraint(equalToConstant: 20)
         ])
     }
     
